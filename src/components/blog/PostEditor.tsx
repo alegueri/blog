@@ -71,6 +71,15 @@ export function PostEditor({ initial }: PostEditorProps) {
     });
   };
 
+  const handlePaste = async (e: React.ClipboardEvent<HTMLTextAreaElement>) => {
+    const file = Array.from(e.clipboardData.items)
+      .find((item) => item.type.startsWith('image/'))
+      ?.getAsFile();
+    if (!file) return;
+    e.preventDefault();
+    await uploadImage(file);
+  };
+
   const uploadImage = async (file: File) => {
     setUploading(true);
     const supabase = createClient();
@@ -187,6 +196,7 @@ export function PostEditor({ initial }: PostEditorProps) {
             ref={textareaRef}
             value={content}
             onChange={(e) => setContent(e.target.value)}
+            onPaste={handlePaste}
             placeholder="Write your post in Markdown..."
             rows={24}
             className="w-full px-5 py-4 font-mono text-sm text-gray-900 placeholder-gray-400 focus:outline-none resize-y bg-white"

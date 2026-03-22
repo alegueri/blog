@@ -24,6 +24,24 @@ export async function getAllPosts(): Promise<PostMeta[]> {
   }));
 }
 
+export async function getAllDrafts(supabaseClient: ReturnType<typeof createPublicClient>): Promise<PostMeta[]> {
+  const { data } = await supabaseClient
+    .from('posts')
+    .select('id, slug, title, excerpt, tags, created_at, content')
+    .eq('published', false)
+    .order('created_at', { ascending: false });
+
+  return (data ?? []).map((p) => ({
+    id: p.id,
+    slug: p.slug,
+    title: p.title,
+    excerpt: p.excerpt,
+    date: p.created_at,
+    tags: p.tags,
+    readingTime: readingTime(p.content),
+  }));
+}
+
 export async function getPost(slug: string): Promise<Post | null> {
   const supabase = createPublicClient();
   const { data } = await supabase

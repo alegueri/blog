@@ -6,13 +6,19 @@ import { deletePost } from '@/app/actions/posts';
 interface PostCardProps {
   post: PostMeta & { id?: string };
   isAdmin?: boolean;
+  isDraft?: boolean;
 }
 
-export function PostCard({ post, isAdmin }: PostCardProps) {
+export function PostCard({ post, isAdmin, isDraft }: PostCardProps) {
   return (
-    <article className="group relative rounded-2xl border border-gray-100 bg-white p-6 shadow-sm transition-all duration-200 hover:shadow-md hover:-translate-y-0.5 flex flex-col">
-      <Link href={`/posts/${post.slug}`} className="flex-1">
+    <article className={`group relative rounded-2xl border bg-white p-6 shadow-sm transition-all duration-200 hover:shadow-md hover:-translate-y-0.5 flex flex-col ${isDraft ? 'border-amber-200 border-dashed' : 'border-gray-100'}`}>
+      <Link href={isDraft ? `/admin/edit/${post.slug}` : `/posts/${post.slug}`} className="flex-1">
         <div className="flex flex-wrap gap-2 mb-3">
+          {isDraft && (
+            <span className="rounded-full bg-amber-50 px-2.5 py-0.5 text-xs font-medium text-amber-600">
+              Draft
+            </span>
+          )}
           {post.tags.map((tag) => (
             <span
               key={tag}

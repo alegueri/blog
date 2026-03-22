@@ -1,14 +1,19 @@
 import Link from 'next/link';
-import { getAllPosts } from '@/lib/posts-db';
+import { getAllPosts, getAllDrafts } from '@/lib/posts-db';
 import { PostCard } from '@/components/blog/PostCard';
 import { createClient } from '@/lib/supabase/server';
 
 export const dynamic = 'force-dynamic';
 
 export default async function Home() {
-  const [posts, supabase] = await Promise.all([getAllPosts(), createClient()]);
+  const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   const isAdmin = user?.email === process.env.ADMIN_EMAIL;
+
+  const [posts, drafts] = await Promise.all([
+    getAllPosts(),
+    isAdmin ? getAllDrafts(supabase as any) : Promise.resolve([]),
+  ]);
 
   return (
     <div>
@@ -22,7 +27,21 @@ export default async function Home() {
         </p>
       </div>
 
-      {/* Posts header */}
+      {/* Drafts — admin only */}
+      {isAdmin && drafts.length > 0 && (
+        <div className="mb-10">
+          <h2 className="text-sm font-semibold text-amber-600 uppercase tracking-widest mb-4">
+            Drafts ({drafts.length})
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {drafts.map((post) => (
+              <PostCard key={post.slug} post={post} isAdmin={isAdmin} isDraft />
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Published posts */}
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-sm font-semibold text-gray-400 uppercase tracking-widest">
           {posts.length} {posts.length === 1 ? 'Post' : 'Posts'}
