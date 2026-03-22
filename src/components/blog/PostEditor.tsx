@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useTransition, useEffect, useRef } from 'react';
+import { useRouter } from 'next/navigation';
 import { marked } from 'marked';
 import { createPost, updatePost } from '@/app/actions/posts';
 import { createClient } from '@/lib/supabase/client';
@@ -36,6 +37,7 @@ export function PostEditor({ initial }: PostEditorProps) {
   const [uploading, setUploading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const router = useRouter();
 
   // Auto-generate slug from title until user manually edits it
   useEffect(() => {
@@ -57,14 +59,14 @@ export function PostEditor({ initial }: PostEditorProps) {
       return;
     }
     startTransition(async () => {
-      try {
-        if (initial) {
-          await updatePost(initial.id, data);
-        } else {
-          await createPost(data);
-        }
-      } catch (e) {
-        setError(e instanceof Error ? e.message : 'Something went wrong');
+      const result = initial
+        ? await updatePost(initial.id, data)
+        : await createPost(data);
+      if (result.error) {
+        setError(result.error);
+      } else {
+        router.push('/');
+        router.refresh();
       }
     });
   };

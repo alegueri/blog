@@ -2,7 +2,6 @@
 
 import { createClient } from '@/lib/supabase/server';
 import { revalidatePath } from 'next/cache';
-import { redirect } from 'next/navigation';
 
 async function requireAdmin() {
   const supabase = await createClient();
@@ -22,29 +21,34 @@ interface PostData {
   published: boolean;
 }
 
-export async function createPost(data: PostData) {
-  const { supabase } = await requireAdmin();
-  const { error } = await supabase.from('posts').insert(data);
-  if (error) throw new Error(error.message);
-  revalidatePath('/');
-  revalidatePath('/admin');
-  redirect('/admin');
+export async function createPost(data: PostData): Promise<{ error?: string }> {
+  try {
+    const { supabase } = await requireAdmin();
+    const { error } = await supabase.from('posts').insert(data);
+    if (error) return { error: error.message };
+    revalidatePath('/');
+    return {};
+  } catch (e) {
+    return { error: e instanceof Error ? e.message : 'Unknown error' };
+  }
 }
 
-export async function updatePost(id: string, data: PostData) {
-  const { supabase } = await requireAdmin();
-  const { error } = await supabase.from('posts').update(data).eq('id', id);
-  if (error) throw new Error(error.message);
-  revalidatePath('/');
-  revalidatePath(`/posts/${data.slug}`);
-  revalidatePath('/admin');
-  redirect('/admin');
+export async function updatePost(id: string, data: PostData): Promise<{ error?: string }> {
+  try {
+    const { supabase } = await requireAdmin();
+    const { error } = await supabase.from('posts').update(data).eq('id', id);
+    if (error) return { error: error.message };
+    revalidatePath('/');
+    revalidatePath(`/posts/${data.slug}`);
+    return {};
+  } catch (e) {
+    return { error: e instanceof Error ? e.message : 'Unknown error' };
+  }
 }
 
-export async function deletePost(id: string, slug: string) {
+export async function deletePost(id: string, slug: string): Promise<void> {
   const { supabase } = await requireAdmin();
   await supabase.from('posts').delete().eq('id', id);
   revalidatePath('/');
   revalidatePath(`/posts/${slug}`);
-  revalidatePath('/admin');
 }
