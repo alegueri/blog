@@ -28,7 +28,7 @@ export function Header() {
 
   return (
     <header className="sticky top-0 z-50 border-b border-gray-100 bg-white/80 backdrop-blur-md">
-      <div className="mx-auto flex max-w-3xl items-center justify-between px-6 py-4">
+      <div className="mx-auto flex max-w-5xl items-center justify-between px-6 py-4">
         <Link href="/" className="text-lg font-bold tracking-tight text-gray-900">
           Ale's Blog
         </Link>
@@ -45,12 +45,7 @@ export function Header() {
               <span className="text-sm text-gray-600 hidden sm:block">
                 {user.user_metadata?.full_name ?? user.email}
               </span>
-              {user.email === process.env.NEXT_PUBLIC_ADMIN_EMAIL && (
-                <Link href="/admin" className="text-sm text-gray-500 hover:text-gray-800 transition-colors">
-                  Admin
-                </Link>
-              )}
-              <button
+<button
                 onClick={signOut}
                 className="text-sm text-gray-500 hover:text-gray-800 transition-colors"
               >

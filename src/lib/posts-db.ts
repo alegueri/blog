@@ -9,11 +9,12 @@ export async function getAllPosts(): Promise<PostMeta[]> {
   const supabase = createPublicClient();
   const { data } = await supabase
     .from('posts')
-    .select('slug, title, excerpt, tags, created_at, content')
+    .select('id, slug, title, excerpt, tags, created_at, content')
     .eq('published', true)
     .order('created_at', { ascending: false });
 
   return (data ?? []).map((p) => ({
+    id: p.id,
     slug: p.slug,
     title: p.title,
     excerpt: p.excerpt,
