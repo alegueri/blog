@@ -32,6 +32,9 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
             </span>
           ))}
         </div>
+        {post.icon && (
+          <div className="text-5xl mb-4">{post.icon}</div>
+        )}
         <h1 className="text-4xl font-bold tracking-tight text-gray-900 leading-tight mb-4">
           {post.title}
         </h1>

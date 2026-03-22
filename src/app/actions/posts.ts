@@ -19,6 +19,7 @@ interface PostData {
   content: string;
   tags: string[];
   published: boolean;
+  icon: string;
 }
 
 export async function createPost(data: PostData): Promise<{ error?: string }> {

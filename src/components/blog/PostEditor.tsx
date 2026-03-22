@@ -14,6 +14,7 @@ interface InitialPost {
   content: string;
   tags: string[];
   published: boolean;
+  icon: string;
 }
 
 interface PostEditorProps {
@@ -30,6 +31,7 @@ export function PostEditor({ initial }: PostEditorProps) {
   const [excerpt, setExcerpt] = useState(initial?.excerpt ?? '');
   const [content, setContent] = useState(initial?.content ?? '');
   const [tags, setTags] = useState(initial?.tags.join(', ') ?? '');
+  const [icon, setIcon] = useState(initial?.icon ?? '');
   const [tab, setTab] = useState<'write' | 'preview'>('write');
   const [isPending, startTransition] = useTransition();
   const [error, setError] = useState('');
@@ -53,6 +55,7 @@ export function PostEditor({ initial }: PostEditorProps) {
       content,
       tags: tags.split(',').map((t) => t.trim()).filter(Boolean),
       published,
+      icon: icon.trim(),
     };
     if (!data.slug || !data.title) {
       setError('Title and slug are required.');
@@ -111,12 +114,21 @@ export function PostEditor({ initial }: PostEditorProps) {
     <div className="flex flex-col gap-6">
       {/* Meta */}
       <div className="grid gap-4">
-        <input
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          placeholder="Post title..."
-          className="w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-xl font-bold text-gray-900 placeholder-gray-300 focus:border-indigo-300 focus:outline-none focus:ring-2 focus:ring-indigo-100"
-        />
+        <div className="flex gap-3">
+          <input
+            value={icon}
+            onChange={(e) => setIcon(e.target.value)}
+            placeholder="🖊️"
+            className="w-16 rounded-xl border border-gray-200 bg-white px-3 py-3 text-xl text-center focus:border-indigo-300 focus:outline-none focus:ring-2 focus:ring-indigo-100"
+            maxLength={2}
+          />
+          <input
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            placeholder="Post title..."
+            className="flex-1 rounded-xl border border-gray-200 bg-white px-4 py-3 text-xl font-bold text-gray-900 placeholder-gray-300 focus:border-indigo-300 focus:outline-none focus:ring-2 focus:ring-indigo-100"
+          />
+        </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
@@ -213,6 +225,13 @@ export function PostEditor({ initial }: PostEditorProps) {
 
       {/* Actions */}
       <div className="flex items-center justify-end gap-3 pb-8">
+        <button
+          onClick={() => router.push('/')}
+          disabled={isPending}
+          className="rounded-full border border-gray-200 bg-white px-5 py-2 text-sm font-medium text-gray-500 hover:bg-gray-50 disabled:opacity-40 transition-colors"
+        >
+          Cancel
+        </button>
         <button
           onClick={() => save(false)}
           disabled={isPending}

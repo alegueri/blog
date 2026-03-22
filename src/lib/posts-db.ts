@@ -9,7 +9,7 @@ export async function getAllPosts(): Promise<PostMeta[]> {
   const supabase = createPublicClient();
   const { data } = await supabase
     .from('posts')
-    .select('id, slug, title, excerpt, tags, created_at, content')
+    .select('id, slug, title, excerpt, tags, created_at, content, icon')
     .eq('published', true)
     .order('created_at', { ascending: false });
 
@@ -21,13 +21,14 @@ export async function getAllPosts(): Promise<PostMeta[]> {
     date: p.created_at,
     tags: p.tags,
     readingTime: readingTime(p.content),
+    icon: p.icon,
   }));
 }
 
 export async function getAllDrafts(supabaseClient: ReturnType<typeof createPublicClient>): Promise<PostMeta[]> {
   const { data } = await supabaseClient
     .from('posts')
-    .select('id, slug, title, excerpt, tags, created_at, content')
+    .select('id, slug, title, excerpt, tags, created_at, content, icon')
     .eq('published', false)
     .order('created_at', { ascending: false });
 
@@ -39,6 +40,7 @@ export async function getAllDrafts(supabaseClient: ReturnType<typeof createPubli
     date: p.created_at,
     tags: p.tags,
     readingTime: readingTime(p.content),
+    icon: p.icon,
   }));
 }
 
@@ -60,5 +62,6 @@ export async function getPost(slug: string): Promise<Post | null> {
     tags: data.tags,
     readingTime: readingTime(data.content),
     content: data.content,
+    icon: data.icon,
   };
 }

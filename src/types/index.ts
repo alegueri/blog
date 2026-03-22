@@ -4,8 +4,9 @@ export interface Post {
   excerpt: string;
   date: string;
   tags: string[];
-  readingTime: number; // minutes
+  readingTime: number;
   content: string;
+  icon?: string;
 }
 
 export interface PostMeta {
@@ -16,6 +17,7 @@ export interface PostMeta {
   date: string;
   tags: string[];
   readingTime: number;
+  icon?: string;
 }
 
 export interface Comment {

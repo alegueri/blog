@@ -37,6 +37,7 @@ export default async function EditPostPage({ params }: { params: Promise<{ slug:
           excerpt: post.excerpt,
           content: post.content,
           tags: post.tags,
+          icon: post.icon ?? '',
           published: post.published,
         }}
       />

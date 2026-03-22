@@ -29,7 +29,7 @@ export function PostCard({ post, isAdmin, isDraft }: PostCardProps) {
           ))}
         </div>
         <h2 className="text-xl font-bold text-gray-900 group-hover:text-indigo-600 transition-colors leading-snug mb-2">
-          {post.title}
+          {post.icon && <span className="mr-2">{post.icon}</span>}{post.title}
         </h2>
         <p className="text-gray-500 text-sm leading-relaxed line-clamp-2 mb-4">{post.excerpt}</p>
         <div className="flex items-center gap-3 text-xs text-gray-400">
