@@ -37,7 +37,35 @@ export async function createPost(data: PostData): Promise<{ error?: string }> {
 export async function updatePost(id: string, data: PostData): Promise<{ error?: string }> {
   try {
     const { supabase } = await requireAdmin();
-    const { error } = await supabase.from('posts').update(data).eq('id', id);
+
+    // Check if post is currently published
+    const { data: current } = await supabase
+      .from('posts').select('published').eq('id', id).single();
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    let updatePayload: any;
+
+    if (current?.published && !data.published) {
+      // Saving as draft of an already-published post — store in draft column only
+      updatePayload = {
+        draft: {
+          title: data.title,
+          excerpt: data.excerpt,
+          content: data.content,
+          tags: data.tags,
+          icon: data.icon,
+          slug: data.slug,
+        },
+      };
+    } else if (data.published) {
+      // Publishing — write to main columns and clear any pending draft
+      updatePayload = { ...data, draft: null };
+    } else {
+      // Draft of an unpublished post — update normally
+      updatePayload = data;
+    }
+
+    const { error } = await supabase.from('posts').update(updatePayload).eq('id', id);
     if (error) return { error: error.message };
     revalidatePath('/');
     revalidatePath(`/posts/${data.slug}`);

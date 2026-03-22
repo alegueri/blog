@@ -59,28 +59,35 @@ export default async function Home() {
 
       {/* Drafts sidebar — admin only */}
       {isAdmin && (
-        <aside className="w-56 shrink-0 hidden lg:block">
-          <div className="sticky top-24">
-            <h2 className="text-xs font-semibold text-amber-600 uppercase tracking-widest mb-3">
-              Drafts {drafts.length > 0 && `(${drafts.length})`}
-            </h2>
+        <aside className="w-52 shrink-0 hidden lg:block">
+          <div className="sticky top-24 rounded-2xl border border-amber-100 bg-white shadow-sm overflow-hidden">
+            <div className="px-4 py-3 border-b border-amber-100 bg-amber-50">
+              <h2 className="text-xs font-semibold text-amber-600 uppercase tracking-widest">
+                Drafts {drafts.length > 0 && `(${drafts.length})`}
+              </h2>
+            </div>
             {drafts.length === 0 ? (
-              <p className="text-xs text-gray-400">No drafts.</p>
+              <p className="text-xs text-gray-400 px-4 py-3">No drafts.</p>
             ) : (
-              <div className="flex flex-col gap-1">
+              <div className="flex flex-col divide-y divide-gray-50">
                 {drafts.map((draft) => (
                   <Link
                     key={draft.slug}
                     href={`/admin/edit/${draft.slug}`}
-                    className="group flex flex-col gap-0.5 rounded-lg px-3 py-2.5 hover:bg-amber-50 transition-colors border border-transparent hover:border-amber-100"
+                    className="group flex flex-col gap-0.5 px-4 py-3 hover:bg-amber-50 transition-colors"
                   >
                     <span className="text-sm font-medium text-gray-800 group-hover:text-amber-700 leading-snug line-clamp-2">
                       {draft.icon && <span className="mr-1">{draft.icon}</span>}
                       {draft.title || '(Untitled)'}
                     </span>
-                    <span className="text-xs text-gray-400">
-                      {draft.date ? format(new Date(draft.date), 'MMM d') : '—'}
-                    </span>
+                    <div className="flex items-center gap-1.5">
+                      <span className="text-xs text-gray-400">
+                        {draft.date ? format(new Date(draft.date), 'MMM d') : '—'}
+                      </span>
+                      {draft.hasDraft && (
+                        <span className="text-xs bg-green-100 text-green-600 rounded-full px-1.5 py-0.5 font-medium">live</span>
+                      )}
+                    </div>
                   </Link>
                 ))}
               </div>

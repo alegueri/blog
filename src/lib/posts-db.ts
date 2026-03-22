@@ -28,19 +28,21 @@ export async function getAllPosts(): Promise<PostMeta[]> {
 export async function getAllDrafts(supabaseClient: ReturnType<typeof createPublicClient>): Promise<PostMeta[]> {
   const { data } = await supabaseClient
     .from('posts')
-    .select('id, slug, title, excerpt, tags, created_at, content, icon')
-    .eq('published', false)
-    .order('created_at', { ascending: false });
+    .select('id, slug, title, excerpt, tags, created_at, content, icon, published, draft')
+    .or('published.eq.false,draft.not.is.null')
+    .order('updated_at', { ascending: false });
 
   return (data ?? []).map((p) => ({
     id: p.id,
     slug: p.slug,
-    title: p.title,
-    excerpt: p.excerpt,
+    // Show draft title if available, fallback to published title
+    title: p.draft?.title ?? p.title,
+    excerpt: p.draft?.excerpt ?? p.excerpt,
     date: p.created_at,
-    tags: p.tags,
-    readingTime: readingTime(p.content),
-    icon: p.icon,
+    tags: p.draft?.tags ?? p.tags,
+    readingTime: readingTime(p.draft?.content ?? p.content),
+    icon: p.draft?.icon ?? p.icon,
+    hasDraft: p.published && p.draft != null,
   }));
 }
 

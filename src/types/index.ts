@@ -18,6 +18,7 @@ export interface PostMeta {
   tags: string[];
   readingTime: number;
   icon?: string;
+  hasDraft?: boolean; // published post with a pending draft
 }
 
 export interface Comment {

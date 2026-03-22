@@ -20,25 +20,38 @@ export default async function EditPostPage({ params }: { params: Promise<{ slug:
 
   if (!post) notFound();
 
+  // If there's a pending draft, load that into the editor instead of published content
+  const draft = post.draft as Record<string, unknown> | null;
+  const editContent = {
+    title: (draft?.title ?? post.title) as string,
+    excerpt: (draft?.excerpt ?? post.excerpt) as string,
+    content: (draft?.content ?? post.content) as string,
+    tags: (draft?.tags ?? post.tags) as string[],
+    icon: (draft?.icon ?? post.icon ?? '') as string,
+    slug: (draft?.slug ?? post.slug) as string,
+  };
+
   return (
     <div>
       <div className="flex items-center gap-3 mb-8">
-        <Link href="/admin" className="text-sm text-gray-400 hover:text-gray-600 transition-colors">
-          ← Admin
+        <Link href="/" className="text-sm text-gray-400 hover:text-gray-600 transition-colors">
+          ← Home
         </Link>
         <span className="text-gray-300">/</span>
-        <span className="text-sm font-medium text-gray-900 truncate">{post.title || 'Edit Post'}</span>
+        <span className="text-sm font-medium text-gray-900 truncate">{editContent.title || 'Edit Post'}</span>
       </div>
       <PostEditor
         initial={{
           id: post.id,
-          slug: post.slug,
-          title: post.title,
-          excerpt: post.excerpt,
-          content: post.content,
-          tags: post.tags,
-          icon: post.icon ?? '',
+          slug: editContent.slug,
+          title: editContent.title,
+          excerpt: editContent.excerpt,
+          content: editContent.content,
+          tags: editContent.tags,
+          icon: editContent.icon,
           published: post.published,
+          isPublished: post.published,
+          hasPendingDraft: post.published && draft != null,
         }}
       />
     </div>

@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { marked } from 'marked';
 import { createPost, updatePost } from '@/app/actions/posts';
 import { createClient } from '@/lib/supabase/client';
+import { EmojiPicker } from './EmojiPicker';
 
 interface InitialPost {
   id: string;
@@ -15,6 +16,8 @@ interface InitialPost {
   tags: string[];
   published: boolean;
   icon: string;
+  isPublished?: boolean;
+  hasPendingDraft?: boolean;
 }
 
 interface PostEditorProps {
@@ -114,14 +117,8 @@ export function PostEditor({ initial }: PostEditorProps) {
     <div className="flex flex-col gap-6">
       {/* Meta */}
       <div className="grid gap-4">
-        <div className="flex gap-3">
-          <input
-            value={icon}
-            onChange={(e) => setIcon(e.target.value)}
-            placeholder="🖊️"
-            className="w-16 rounded-xl border border-gray-200 bg-white px-3 py-3 text-xl text-center focus:border-indigo-300 focus:outline-none focus:ring-2 focus:ring-indigo-100"
-            maxLength={2}
-          />
+        <div className="flex gap-3 items-center">
+          <EmojiPicker value={icon} onChange={setIcon} />
           <input
             value={title}
             onChange={(e) => setTitle(e.target.value)}
@@ -162,6 +159,22 @@ export function PostEditor({ initial }: PostEditorProps) {
           />
         </div>
       </div>
+
+      {/* Banner for published posts */}
+      {initial?.isPublished && (
+        <div className={`rounded-xl px-4 py-3 text-sm flex items-center gap-2 ${
+          initial.hasPendingDraft
+            ? 'bg-amber-50 border border-amber-200 text-amber-700'
+            : 'bg-green-50 border border-green-200 text-green-700'
+        }`}>
+          <span>{initial.hasPendingDraft ? '📝' : '✅'}</span>
+          <span>
+            {initial.hasPendingDraft
+              ? 'This post has a pending draft. The live version is unchanged until you publish.'
+              : 'This post is published. Save as draft to stage changes without affecting the live version.'}
+          </span>
+        </div>
+      )}
 
       {/* Write / Preview tabs */}
       <div className="rounded-xl border border-gray-200 overflow-hidden">
