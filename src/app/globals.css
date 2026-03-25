@@ -2,20 +2,25 @@
 @plugin "@tailwindcss/typography";
 
 :root {
-  --background: #f4f2ee;
-  --foreground: #111827;
+  --background: #f5f2ed;
+  --foreground: #1a1a1a;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
+  --font-sans: var(--font-inter);
   --font-mono: var(--font-geist-mono);
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
+}
+
+/* Apply Playfair to all headings site-wide */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-playfair), Georgia, 'Times New Roman', serif;
 }
 
 /* Tiptap editor placeholder */
@@ -32,4 +37,9 @@ body {
   max-width: 100%;
   height: auto;
   border-radius: 0.75rem;
+}
+
+/* Override prose headings font inside post content */
+.prose h1, .prose h2, .prose h3, .prose h4 {
+  font-family: var(--font-playfair), Georgia, serif;
 }
