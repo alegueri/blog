@@ -57,6 +57,7 @@ export async function getPost(slug: string): Promise<Post | null> {
 
   if (!data) return null;
   return {
+    id: data.id,
     slug: data.slug,
     title: data.title,
     excerpt: data.excerpt,
