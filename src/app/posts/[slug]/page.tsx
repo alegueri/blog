@@ -30,7 +30,7 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
   const isAdmin = user?.email === process.env.ADMIN_EMAIL;
 
   return (
-    <div className="max-w-2xl mx-auto">
+    <div className="max-w-3xl mx-auto">
       {/* Back link */}
       <Link href="/" className="inline-flex items-center gap-1.5 text-sm text-stone-400 hover:text-indigo-600 transition-colors mb-8 group" style={{ fontFamily: 'var(--font-inter), sans-serif' }}>
         <span className="group-hover:-translate-x-0.5 transition-transform">←</span>

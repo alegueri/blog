@@ -73,24 +73,25 @@ export default async function Home() {
 
       {/* Drafts sidebar — admin only */}
       {isAdmin && (
-        <aside className="w-48 shrink-0 hidden lg:block">
-          <div className="sticky top-24 rounded-2xl border border-amber-200 bg-white shadow-sm overflow-hidden">
-            <div className="px-4 py-3 border-b border-amber-100 bg-amber-50">
-              <h2 className="text-xs font-semibold text-amber-600 uppercase tracking-widest" style={{ fontFamily: 'var(--font-inter), sans-serif' }}>
+        <aside className="w-56 shrink-0 hidden lg:block">
+          <div className="sticky top-24 bg-white border border-stone-200 rounded-2xl shadow-sm overflow-hidden">
+            <div className="px-5 py-4 border-b border-stone-100 flex items-center gap-2">
+              <span className="text-base">📝</span>
+              <h2 className="text-xs font-semibold text-stone-500 uppercase tracking-widest">
                 Drafts {drafts.length > 0 && `(${drafts.length})`}
               </h2>
             </div>
             {drafts.length === 0 ? (
-              <p className="text-xs text-stone-400 px-4 py-3">No drafts.</p>
+              <p className="text-xs text-stone-400 px-5 py-4">No drafts yet.</p>
             ) : (
-              <div className="flex flex-col divide-y divide-stone-50">
+              <div className="flex flex-col">
                 {drafts.map((draft) => (
                   <Link
                     key={draft.slug}
                     href={`/admin/edit/${draft.slug}`}
-                    className="group flex flex-col gap-0.5 px-4 py-3 hover:bg-amber-50 transition-colors"
+                    className="group flex flex-col gap-1 px-5 py-3.5 border-b border-stone-50 last:border-0 hover:bg-stone-50 transition-colors"
                   >
-                    <span className="text-sm font-medium text-gray-800 group-hover:text-amber-700 leading-snug line-clamp-2" style={{ fontFamily: 'var(--font-inter), sans-serif' }}>
+                    <span className="text-sm font-medium text-gray-800 group-hover:text-indigo-600 leading-snug line-clamp-2 transition-colors">
                       {draft.icon && <span className="mr-1">{draft.icon}</span>}
                       {draft.title || '(Untitled)'}
                     </span>
@@ -99,7 +100,7 @@ export default async function Home() {
                         {draft.date ? format(new Date(draft.date), 'MMM d') : '—'}
                       </span>
                       {draft.hasDraft && (
-                        <span className="text-xs bg-green-100 text-green-600 rounded-full px-1.5 py-0.5 font-medium">live</span>
+                        <span className="text-xs bg-indigo-50 text-indigo-500 rounded-full px-1.5 py-0.5 font-medium border border-indigo-100">live</span>
                       )}
                     </div>
                   </Link>

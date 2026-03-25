@@ -28,7 +28,7 @@ export function Header() {
 
   return (
     <header className="sticky top-0 z-50 border-b border-stone-200 bg-[#f5f2ed]/90 backdrop-blur-md">
-      <div className="mx-auto flex max-w-4xl items-center justify-between px-6 py-4">
+      <div className="mx-auto flex max-w-6xl items-center justify-between px-8 py-4">
         <Link href="/" className="text-xl font-bold tracking-tight text-gray-900" style={{ fontFamily: 'var(--font-playfair), Georgia, serif' }}>
           Ale's Blog
         </Link>
