@@ -21,23 +21,23 @@ export default async function Home() {
       {/* Main content */}
       <div className="flex-1 min-w-0">
         {/* Hero */}
-        <div className="mb-12">
-          <h1 className="text-4xl font-bold tracking-tight text-gray-900 mb-3">
+        <div className="mb-10 pb-10 border-b border-gray-200">
+          <h1 className="text-5xl font-bold tracking-tight text-gray-900 mb-4 leading-tight">
             Hey, I&apos;m Ale 👋
           </h1>
-          <p className="text-lg text-gray-400 leading-relaxed max-w-xl">
-            I write about code, design, and things I find interesting.
+          <p className="text-base text-gray-500 leading-relaxed max-w-lg">
+            I write about code, design, and things I find interesting. Welcome to my corner of the internet.
           </p>
         </div>
 
-        <div className="flex items-center justify-between mb-2">
-          <h2 className="text-xs font-semibold text-gray-400 uppercase tracking-widest">
+        <div className="flex items-center justify-between mb-5">
+          <p className="text-xs font-semibold text-gray-400 uppercase tracking-widest">
             {posts.length} {posts.length === 1 ? 'Post' : 'Posts'}
-          </h2>
+          </p>
           {isAdmin && (
             <Link
               href="/admin/new"
-              className="rounded-full bg-indigo-600 px-4 py-1.5 text-xs font-medium text-white hover:bg-indigo-500 transition-colors"
+              className="rounded-full bg-indigo-600 px-4 py-1.5 text-xs font-semibold text-white hover:bg-indigo-500 transition-colors shadow-sm"
             >
               + Write
             </Link>

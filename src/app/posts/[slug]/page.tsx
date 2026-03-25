@@ -30,7 +30,7 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
   const isAdmin = user?.email === process.env.ADMIN_EMAIL;
 
   return (
-    <article className="max-w-2xl mx-auto">
+    <article className="max-w-2xl mx-auto bg-white border border-gray-200 rounded-2xl px-10 py-12 shadow-sm">
       <div className="mb-10">
         <div className="flex flex-wrap gap-2 mb-4">
           {post.tags.map((tag) => (
